@@ -1,12 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/points_service.dart';
+import '../services/auth_service.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _autoScroll = false;
+  bool _notifications = true;
+  bool _dataSaver = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _autoScroll = prefs.getBool('auto_scroll') ?? false;
+      _notifications = prefs.getBool('notifications') ?? true;
+      _dataSaver = prefs.getBool('data_saver') ?? false;
+    });
+  }
+
+  Future<void> _saveAutoScroll(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('auto_scroll', value);
+    setState(() => _autoScroll = value);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final authService = context.read<AuthService>();
+    final user = authService.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -22,14 +57,25 @@ class SettingsScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: const Icon(Icons.person, size: 40, color: Colors.white),
+                  child: Text(
+                    user?.displayName?.substring(0, 1).toUpperCase() ?? 'U',
+                    style: const TextStyle(fontSize: 32, color: Colors.white),
+                  ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Guest User',
-                  style: TextStyle(
+                Text(
+                  user?.displayName ?? 'User',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  user?.email ?? '',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -63,8 +109,12 @@ class SettingsScreen extends StatelessWidget {
             icon: Icons.notifications_outlined,
             title: 'Notifications',
             trailing: Switch(
-              value: true,
-              onChanged: (value) {},
+              value: _notifications,
+              onChanged: (value) async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('notifications', value);
+                setState(() => _notifications = value);
+              },
             ),
           ),
           _buildListTile(
@@ -81,6 +131,16 @@ class SettingsScreen extends StatelessWidget {
           _buildSectionHeader('App'),
           _buildListTile(
             context,
+            icon: Icons.auto_awesome,
+            title: 'Auto-Scroll Videos',
+            subtitle: 'Automatically scroll to next video',
+            trailing: Switch(
+              value: _autoScroll,
+              onChanged: _saveAutoScroll,
+            ),
+          ),
+          _buildListTile(
+            context,
             icon: Icons.dark_mode_outlined,
             title: 'Dark Mode',
             trailing: Switch(
@@ -93,8 +153,12 @@ class SettingsScreen extends StatelessWidget {
             icon: Icons.data_usage,
             title: 'Data Saver',
             trailing: Switch(
-              value: false,
-              onChanged: (value) {},
+              value: _dataSaver,
+              onChanged: (value) async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('data_saver', value);
+                setState(() => _dataSaver = value);
+              },
             ),
           ),
           _buildListTile(
@@ -284,13 +348,17 @@ class SettingsScreen extends StatelessWidget {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Logged out')),
-              );
+              final authService = context.read<AuthService>();
+              await authService.signOut();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Logged out successfully')),
+                );
+              }
             },
-            child: const Text('Logout'),
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

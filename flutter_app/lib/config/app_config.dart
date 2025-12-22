@@ -4,9 +4,12 @@ class AppConfig {
   static const String adsEndpoint = '$apiBaseUrl/api/ads';
   static const String companiesEndpoint = '$apiBaseUrl/api/companies';
   
-  // AdMob Configuration
-  static const String androidRewardedAdUnitId = 'ca-app-pub-3940256099942544/5224354917'; // Test ID
-  static const String iosRewardedAdUnitId = 'ca-app-pub-3940256099942544/1712485313'; // Test ID
+  // AdMob Configuration - PRODUCTION IDs
+  static const String admobAppId = 'ca-app-pub-7611642022143924~8359601006';
+  static const String androidInterstitialAdUnitId = 'ca-app-pub-7611642022143924/4234306127';
+  static const String iosInterstitialAdUnitId = 'ca-app-pub-7611642022143924/4234306127'; // Use same or get iOS ID
+  static const String androidRewardedAdUnitId = 'ca-app-pub-7611642022143924/4234306127'; // Using interstitial for now
+  static const String iosRewardedAdUnitId = 'ca-app-pub-7611642022143924/4234306127'; // Using interstitial for now
   
   // Points Configuration
   static const int pointsPerRewardedAd = 100;

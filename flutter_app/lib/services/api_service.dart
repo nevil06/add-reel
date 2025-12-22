@@ -39,11 +39,64 @@ class ApiService {
       
       // Return cached ads if available
       if (AppConfig.useFallbackData) {
-        return await getCachedAds();
+        final cached = await getCachedAds();
+        if (cached.isNotEmpty) {
+          return cached;
+        }
+        // Return sample fallback ads
+        return _getFallbackAds();
       }
       
-      return [];
+      return _getFallbackAds();
     }
+  }
+
+  // Fallback sample ads
+  List<Ad> _getFallbackAds() {
+    return [
+      Ad(
+        id: '1',
+        companyId: '1',
+        companyName: 'Sample Company',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        title: 'Sample Ad 1',
+        description: 'This is a sample advertisement. Watch to see amazing content!',
+        thumbnailUrl: 'https://via.placeholder.com/400x600/FF6B6B/FFFFFF?text=Ad+1',
+        ctaText: 'Learn More',
+        targetUrl: 'https://example.com',
+        isActive: true,
+        order: 1,
+        createdAt: DateTime.now(),
+      ),
+      Ad(
+        id: '2',
+        companyId: '1',
+        companyName: 'Sample Company',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        title: 'Sample Ad 2',
+        description: 'Another exciting advertisement for you to enjoy!',
+        thumbnailUrl: 'https://via.placeholder.com/400x600/4ECDC4/FFFFFF?text=Ad+2',
+        ctaText: 'Shop Now',
+        targetUrl: 'https://example.com',
+        isActive: true,
+        order: 2,
+        createdAt: DateTime.now(),
+      ),
+      Ad(
+        id: '3',
+        companyId: '1',
+        companyName: 'Sample Company',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        title: 'Sample Ad 3',
+        description: 'Discover something new with this advertisement!',
+        thumbnailUrl: 'https://via.placeholder.com/400x600/45B7D1/FFFFFF?text=Ad+3',
+        ctaText: 'Get Started',
+        targetUrl: 'https://example.com',
+        isActive: true,
+        order: 3,
+        createdAt: DateTime.now(),
+      ),
+    ];
   }
 
   // Get cached ads

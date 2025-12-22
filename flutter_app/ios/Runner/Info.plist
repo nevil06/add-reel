@@ -50,7 +50,7 @@
 	
 	<!-- AdMob App ID -->
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-7611642022143924~8359601006</string>
 	
 	<!-- Network Usage -->
 	<key>NSAppTransportSecurity</key>

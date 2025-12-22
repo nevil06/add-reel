@@ -1,15 +1,21 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../config/app_config.dart';
 
 class AdMobService {
   RewardedAd? _rewardedAd;
-  bool _isAdLoaded = false;
+  InterstitialAd? _interstitialAd;
+  bool _isRewardedAdLoaded = false;
+  bool _isInterstitialAdLoaded = false;
   
-  bool get isAdLoaded => _isAdLoaded;
+  bool get isAdLoaded => _isRewardedAdLoaded || _isInterstitialAdLoaded;
 
   // Get the appropriate ad unit ID based on platform
-  String get _adUnitId {
+  String get _rewardedAdUnitId {
+    if (kIsWeb) {
+      return ''; // Web not supported
+    }
     if (Platform.isAndroid) {
       return AppConfig.androidRewardedAdUnitId;
     } else if (Platform.isIOS) {
@@ -19,15 +25,33 @@ class AdMobService {
     }
   }
 
+  String get _interstitialAdUnitId {
+    if (kIsWeb) {
+      return ''; // Web not supported
+    }
+    if (Platform.isAndroid) {
+      return AppConfig.androidInterstitialAdUnitId;
+    } else if (Platform.isIOS) {
+      return AppConfig.iosInterstitialAdUnitId;
+    } else {
+      throw UnsupportedError('Unsupported platform');
+    }
+  }
+
   // Load rewarded ad
   Future<void> loadRewardedAd() async {
+    if (kIsWeb) {
+      print('AdMob not supported on web');
+      return;
+    }
+    
     await RewardedAd.load(
-      adUnitId: _adUnitId,
+      adUnitId: _rewardedAdUnitId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           _rewardedAd = ad;
-          _isAdLoaded = true;
+          _isRewardedAdLoaded = true;
           print('Rewarded ad loaded successfully');
           
           // Set up ad callbacks
@@ -39,7 +63,7 @@ class AdMobService {
               print('Rewarded ad dismissed');
               ad.dispose();
               _rewardedAd = null;
-              _isAdLoaded = false;
+              _isRewardedAdLoaded = false;
               // Load next ad
               loadRewardedAd();
             },
@@ -47,7 +71,7 @@ class AdMobService {
               print('Rewarded ad failed to show: $error');
               ad.dispose();
               _rewardedAd = null;
-              _isAdLoaded = false;
+              _isRewardedAdLoaded = false;
               // Load next ad
               loadRewardedAd();
             },
@@ -55,8 +79,48 @@ class AdMobService {
         },
         onAdFailedToLoad: (error) {
           print('Failed to load rewarded ad: $error');
-          _isAdLoaded = false;
+          _isRewardedAdLoaded = false;
           _rewardedAd = null;
+        },
+      ),
+    );
+  }
+
+  // Load interstitial ad
+  Future<void> loadInterstitialAd() async {
+    if (kIsWeb) {
+      print('AdMob not supported on web');
+      return;
+    }
+
+    await InterstitialAd.load(
+      adUnitId: _interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdLoaded = true;
+          print('Interstitial ad loaded successfully');
+
+          _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _interstitialAd = null;
+              _isInterstitialAdLoaded = false;
+              loadInterstitialAd();
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              _interstitialAd = null;
+              _isInterstitialAdLoaded = false;
+              loadInterstitialAd();
+            },
+          );
+        },
+        onAdFailedToLoad: (error) {
+          print('Failed to load interstitial ad: $error');
+          _isInterstitialAdLoaded = false;
+          _interstitialAd = null;
         },
       ),
     );
@@ -67,7 +131,7 @@ class AdMobService {
     required Function(int points) onRewarded,
     required Function() onAdClosed,
   }) async {
-    if (_rewardedAd == null || !_isAdLoaded) {
+    if (_rewardedAd == null || !_isRewardedAdLoaded) {
       print('Rewarded ad is not ready yet');
       return false;
     }
@@ -93,6 +157,9 @@ class AdMobService {
   void dispose() {
     _rewardedAd?.dispose();
     _rewardedAd = null;
-    _isAdLoaded = false;
+    _isRewardedAdLoaded = false;
+    _interstitialAd?.dispose();
+    _interstitialAd = null;
+    _isInterstitialAdLoaded = false;
   }
 }
