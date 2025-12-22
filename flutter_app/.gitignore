@@ -1,0 +1,13 @@
+# Flutter App
+
+This directory contains the Flutter mobile application.
+
+## Quick Start
+
+```bash
+cd flutter_app
+flutter pub get
+flutter run
+```
+
+See [README.md](flutter_app/README.md) for detailed instructions.

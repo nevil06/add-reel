@@ -2,6 +2,7 @@
     "ads": [
         {
             "id": "1",
+            "companyId": "1",
             "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             "title": "Sample Ad 1",
             "description": "This is a sample advertisement. Watch to see amazing content!",
@@ -14,6 +15,7 @@
         },
         {
             "id": "2",
+            "companyId": "1",
             "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
             "title": "Sample Ad 2",
             "description": "Another exciting advertisement for you to enjoy!",
@@ -26,6 +28,7 @@
         },
         {
             "id": "3",
+            "companyId": "1",
             "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
             "title": "Sample Ad 3",
             "description": "Discover something new with this advertisement!",

@@ -1,0 +1,19 @@
+{
+    "companies": [
+        {
+            "id": "1",
+            "name": "Demo Company",
+            "email": "demo@company.com",
+            "password": "$2a$10$demohashedpassword",
+            "commissionRate": 0.3,
+            "isActive": true,
+            "branding": {
+                "logo": "https://via.placeholder.com/200x200/6366F1/FFFFFF?text=Demo+Co",
+                "primaryColor": "#6366F1",
+                "secondaryColor": "#818CF8"
+            },
+            "createdAt": "2025-12-22T11:26:48.000Z",
+            "updatedAt": "2025-12-22T11:26:48.000Z"
+        }
+    ]
+}

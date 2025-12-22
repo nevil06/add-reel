@@ -1,0 +1,61 @@
+name: addreel_flutter
+description: AdReel - Video Ads Platform (Flutter)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # UI & Icons
+  cupertino_icons: ^1.0.6
+  
+  # Video Player
+  video_player: ^2.8.2
+  chewie: ^1.7.5
+  
+  # AdMob
+  google_mobile_ads: ^5.0.0
+  
+  # HTTP & API
+  http: ^1.2.0
+  
+  # Local Storage
+  shared_preferences: ^2.2.2
+  
+  # State Management
+  provider: ^6.1.1
+  
+  # Image Caching
+  cached_network_image: ^3.3.1
+  
+  # URL Launcher
+  url_launcher: ^6.2.4
+  
+  # Pull to Refresh
+  pull_to_refresh: ^2.0.0
+  
+  # Intl for formatting
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+  
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
