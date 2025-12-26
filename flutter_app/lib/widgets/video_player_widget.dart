@@ -52,7 +52,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       
       await _controller.initialize();
       
-      _controller.setLooping(true);
+      _controller.setLooping(false); // Disable looping for auto-scroll
       
       _controller.addListener(() {
         if (_controller.value.position >= _controller.value.duration) {

@@ -184,12 +184,29 @@ class _FeedScreenState extends State<FeedScreen> {
           videoUrl: ad.videoUrl,
           isPlaying: isCurrentPage,
           onVideoEnd: () {
+            // Track analytics
             _analyticsService.trackVideoView(
               adId: ad.id,
               companyId: ad.companyId,
               watchDuration: 30,
               completed: true,
             );
+            
+            // Auto-scroll to next video
+            if (_currentPage < _ads.length - 1) {
+              _pageController.animateToPage(
+                _currentPage + 1,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            } else {
+              // Loop back to first video
+              _pageController.animateToPage(
+                0,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
           },
         ),
         
