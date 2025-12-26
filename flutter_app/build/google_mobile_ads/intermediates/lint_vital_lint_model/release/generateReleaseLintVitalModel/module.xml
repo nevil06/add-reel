@@ -1,0 +1,26 @@
+<lint-module
+    format="1"
+    dir="C:\Users\nevil\AppData\Local\Pub\Cache\hosted\pub.dev\google_mobile_ads-5.3.1\android"
+    name=":google_mobile_ads"
+    type="LIBRARY"
+    maven="io.flutter.plugins.googlemobileads:google_mobile_ads:1.0-SNAPSHOT"
+    agpVersion="8.11.1"
+    buildFolder="C:\Users\nevil\OneDrive\Desktop\addreel\flutter_app\build\google_mobile_ads"
+    bootClassPath="C:\Users\nevil\AppData\Local\Android\Sdk\platforms\android-34\android.jar;C:\Users\nevil\AppData\Local\Android\Sdk\build-tools\35.0.0\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-34"
+    neverShrinking="true">
+  <lintOptions
+      disable="InvalidPackage"
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true">
+    <severities>
+      <severity
+        id="InvalidPackage"
+        severity="IGNORE" />
+    </severities>
+  </lintOptions>
+  <variant name="release"/>
+</lint-module>

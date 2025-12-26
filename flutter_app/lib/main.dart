@@ -80,19 +80,19 @@ class AdReelApp extends StatelessWidget {
   }
 }
 
+
 // Demo mode wrapper - bypasses authentication for testing
 class DemoModeWrapper extends StatelessWidget {
   const DemoModeWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // For web demo, skip login and go straight to app
-    if (kIsWeb) {
-      return const MainScreen();
-    }
+    // Skip login and go straight to app for testing
+    // TODO: Enable AuthWrapper after running 'flutterfire configure'
+    return const MainScreen();
     
-    // For mobile, use normal auth flow
-    return const AuthWrapper();
+    // Uncomment below after Firebase is configured:
+    // return const AuthWrapper();
   }
 }
 

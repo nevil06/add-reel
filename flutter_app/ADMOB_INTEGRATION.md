@@ -2,7 +2,19 @@
 
 ## ✅ What's Been Configured
 
-### Production AdMob IDs Integrated:
+### 🧪 TEST AdMob IDs Currently Active:
+> [!IMPORTANT]
+> **Currently using Google's official TEST ad unit IDs for safe testing!**
+> These test IDs will show real ads but won't affect your production metrics.
+> **Remember to switch to production IDs before releasing your app!**
+
+- **Test App ID**: `ca-app-pub-3940256099942544~3347511713`
+- **Android Interstitial**: `ca-app-pub-3940256099942544/1033173712`
+- **iOS Interstitial**: `ca-app-pub-3940256099942544/4411468910`
+- **Android Rewarded**: `ca-app-pub-3940256099942544/5224354917`
+- **iOS Rewarded**: `ca-app-pub-3940256099942544/1712485313`
+
+### 📝 Your Production IDs (for later):
 - **App ID**: `ca-app-pub-7611642022143924~8359601006`
 - **Interstitial Ad Unit**: `ca-app-pub-7611642022143924/4234306127`
 - **Rewarded Ad Unit**: `ca-app-pub-7611642022143924/4234306127`
@@ -71,6 +83,112 @@ Earns 100 Points
 Points Saved to Firebase
     ↓
 Next Ad Loads Automatically
+```
+
+---
+
+## 🧪 Testing with Test Ad IDs
+
+### ✅ What You'll See:
+> [!NOTE]
+> **Test ads look and behave like real ads!** They will display actual advertisements from Google's ad network, but they won't generate real revenue or affect your production metrics.
+
+### Testing Steps:
+
+#### **1. Build and Run the App**
+
+**On Android Device:**
+```bash
+cd flutter_app
+flutter run -d android
+```
+
+**On iOS Device:**
+```bash
+cd flutter_app
+flutter run -d ios
+```
+
+#### **2. Test Rewarded Ads (Earn Points)**
+1. ✅ Open the app and navigate to the Feed screen
+2. ✅ Look for the "Earn Points" button (top right)
+3. ✅ Tap the button to trigger a rewarded ad
+4. ✅ Watch the ad completely (don't skip if possible)
+5. ✅ Verify you receive **100 points** after completion
+6. ✅ Check that points appear in your Wallet
+7. ✅ Verify points sync to Firebase
+
+#### **3. Test Interstitial Ads**
+1. ✅ Navigate between videos or screens
+2. ✅ Interstitial ads should show automatically (if implemented)
+3. ✅ Close the ad after viewing
+4. ✅ Verify app continues normally
+
+#### **4. Check Console Logs**
+Look for these success messages in your terminal:
+```
+✅ "Rewarded ad loaded successfully"
+✅ "Interstitial ad loaded successfully"
+✅ "User earned reward: 100 points"
+✅ "Ad showed full screen content"
+```
+
+### 🎯 What to Expect:
+
+| Feature | Expected Behavior |
+|---------|------------------|
+| **Ad Loading** | Ads load within 2-5 seconds |
+| **Ad Display** | Full-screen ad appears |
+| **Ad Content** | Real ads from Google's network |
+| **Reward** | 100 points awarded after completion |
+| **Points Sync** | Points saved to Firebase immediately |
+| **Next Ad** | New ad loads automatically after closing |
+
+### ⚠️ Important Notes:
+
+> [!WARNING]
+> **DO NOT click on test ads excessively!** Even though these are test IDs, excessive clicking can flag your AdMob account. Only click when genuinely testing functionality.
+
+> [!CAUTION]
+> **Remember to switch to production IDs before releasing!** Test IDs will show ads but won't generate revenue for your account.
+
+---
+
+## 🔄 Switching to Production IDs
+
+When you're ready to release your app, follow these steps:
+
+### 1. Update `lib/config/app_config.dart`
+Replace test IDs with your production IDs:
+```dart
+// AdMob Configuration - PRODUCTION IDs
+static const String admobAppId = 'ca-app-pub-7611642022143924~8359601006';
+static const String androidInterstitialAdUnitId = 'ca-app-pub-7611642022143924/4234306127';
+static const String iosInterstitialAdUnitId = 'ca-app-pub-7611642022143924/4234306127';
+static const String androidRewardedAdUnitId = 'ca-app-pub-7611642022143924/4234306127';
+static const String iosRewardedAdUnitId = 'ca-app-pub-7611642022143924/4234306127';
+```
+
+### 2. Update `android/app/src/main/AndroidManifest.xml`
+```xml
+<meta-data
+    android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="ca-app-pub-7611642022143924~8359601006"/>
+```
+
+### 3. Update `ios/Runner/Info.plist`
+```xml
+<key>GADApplicationIdentifier</key>
+<string>ca-app-pub-7611642022143924~8359601006</string>
+```
+
+### 4. Rebuild Your App
+```bash
+# Android
+flutter build apk --release
+
+# iOS
+flutter build ios --release
 ```
 
 ---

@@ -23,9 +23,13 @@ class _FeedScreenState extends State<FeedScreen> {
   final AdMobService _adMobService = AdMobService();
   final AnalyticsService _analyticsService = AnalyticsService();
   
+  
   List<Ad> _ads = [];
   bool _isLoading = true;
   int _currentPage = 0;
+  Map<String, int> _likeCounts = {}; // Track likes for each ad
+  Set<String> _likedAds = {}; // Track which ads user has liked
+  int get _currentIndex => _currentPage; // Alias for compatibility
 
   @override
   void initState() {
@@ -290,15 +294,18 @@ class _FeedScreenState extends State<FeedScreen> {
           child: Column(
             children: [
               _buildActionButton(
-                icon: Icons.favorite_border,
-                label: '0',
-                onTap: () {},
+                icon: _likedAds.contains(_ads[_currentIndex].id)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                label: '${_likeCounts[_ads[_currentIndex].id] ?? 0}',
+                onTap: () => _handleLike(_ads[_currentIndex]),
+                isLiked: _likedAds.contains(_ads[_currentIndex].id),
               ),
               const SizedBox(height: 20),
               _buildActionButton(
                 icon: Icons.share,
                 label: 'Share',
-                onTap: () {},
+                onTap: () => _handleShare(_ads[_currentIndex]),
               ),
             ],
           ),
@@ -307,10 +314,53 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
+  void _handleLike(Ad ad) {
+    setState(() {
+      if (_likedAds.contains(ad.id)) {
+        // Unlike
+        _likedAds.remove(ad.id);
+        _likeCounts[ad.id] = (_likeCounts[ad.id] ?? 1) - 1;
+      } else {
+        // Like
+        _likedAds.add(ad.id);
+        _likeCounts[ad.id] = (_likeCounts[ad.id] ?? 0) + 1;
+      }
+    });
+  }
+
+  void _handleShare(Ad ad) async {
+    try {
+      final String shareText = '''
+🎬 ${ad.title}
+
+${ad.description}
+
+👉 ${ad.targetUrl}
+
+📱 Shared from AdReel
+''';
+      
+      // For now, just show a snackbar
+      // In production, use share_plus package
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Share: ${ad.title}'),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        ),
+      );
+    } catch (e) {
+      print('Error sharing: $e');
+    }
+  }
+
   Widget _buildActionButton({
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    bool isLiked = false,
   }) {
     return GestureDetector(
       onTap: onTap,

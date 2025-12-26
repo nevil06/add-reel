@@ -48,9 +48,9 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	
-	<!-- AdMob App ID -->
+	<!-- AdMob App ID - TEST ID -->
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-7611642022143924~8359601006</string>
+	<string>ca-app-pub-3940256099942544~3347511713</string>
 	
 	<!-- Network Usage -->
 	<key>NSAppTransportSecurity</key>
