@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'screens/feed_screen.dart';
+import 'screens/earn_screen.dart'; // Changed from feed_screen
 import 'screens/wallet_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/admin_screen.dart';
@@ -12,6 +12,7 @@ import 'screens/login_screen.dart';
 import 'services/points_service.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
+import 'config/app_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,18 @@ void main() async {
   // Initialize AdMob (only on mobile)
   if (!kIsWeb) {
     await MobileAds.instance.initialize();
-    print('✅ AdMob initialized successfully');
+    
+    // Configure test devices if any are specified
+    // This allows YOUR devices to see test ads while others see real ads
+    if (AppConfig.testDeviceIds.isNotEmpty) {
+      RequestConfiguration requestConfiguration = RequestConfiguration(
+        testDeviceIds: AppConfig.testDeviceIds,
+      );
+      MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+      print('✅ AdMob initialized with ${AppConfig.testDeviceIds.length} test device(s)');
+    } else {
+      print('✅ AdMob initialized (production mode - real ads for all users)');
+    }
   } else {
     print('⚠️ AdMob not available on web');
   }
@@ -146,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const FeedScreen(),
+    const EarnScreen(), // Changed from FeedScreen - now focused on AdMob ads only
     const WalletScreen(),
     const SettingsScreen(),
     const AdminScreen(),
@@ -168,9 +180,9 @@ class _MainScreenState extends State<MainScreen> {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.play_circle_outline),
-            selectedIcon: Icon(Icons.play_circle),
-            label: 'Feed',
+            icon: Icon(Icons.currency_rupee_outlined),
+            selectedIcon: Icon(Icons.currency_rupee),
+            label: 'Earn',
           ),
           NavigationDestination(
             icon: Icon(Icons.account_balance_wallet_outlined),

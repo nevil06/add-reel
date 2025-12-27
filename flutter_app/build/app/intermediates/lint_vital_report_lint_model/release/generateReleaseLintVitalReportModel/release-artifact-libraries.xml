@@ -16,6 +16,9 @@
       name=":@@:cloud_firestore::release"
       project=":cloud_firestore"/>
   <library
+      name=":@@:device_info_plus::release"
+      project=":device_info_plus"/>
+  <library
       name=":@@:firebase_auth::release"
       project=":firebase_auth"/>
   <library

@@ -67,7 +67,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="AdReel" >
 
-        <!-- AdMob App ID -->
+        <!-- AdMob App ID - PRODUCTION -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-7611642022143924~8359601006" />

@@ -2,15 +2,75 @@
     "companies": [
         {
             "id": "1",
-            "name": "Demo Company",
-            "email": "demo@company.com",
+            "name": "Tech Innovations Inc",
+            "email": "contact@techinnovations.com",
             "password": "$2a$10$demohashedpassword",
             "commissionRate": 0.3,
             "isActive": true,
             "branding": {
-                "logo": "https://via.placeholder.com/200x200/6366F1/FFFFFF?text=Demo+Co",
-                "primaryColor": "#6366F1",
-                "secondaryColor": "#818CF8"
+                "logo": "https://via.placeholder.com/200x200/FF6B6B/FFFFFF?text=Tech",
+                "primaryColor": "#FF6B6B",
+                "secondaryColor": "#FF8787"
+            },
+            "createdAt": "2025-12-22T11:26:48.000Z",
+            "updatedAt": "2025-12-22T11:26:48.000Z"
+        },
+        {
+            "id": "2",
+            "name": "Fashion Forward",
+            "email": "contact@fashionforward.com",
+            "password": "$2a$10$demohashedpassword",
+            "commissionRate": 0.3,
+            "isActive": true,
+            "branding": {
+                "logo": "https://via.placeholder.com/200x200/4ECDC4/FFFFFF?text=Fashion",
+                "primaryColor": "#4ECDC4",
+                "secondaryColor": "#6FD8D0"
+            },
+            "createdAt": "2025-12-22T11:26:48.000Z",
+            "updatedAt": "2025-12-22T11:26:48.000Z"
+        },
+        {
+            "id": "3",
+            "name": "QuickBite Delivery",
+            "email": "contact@quickbite.com",
+            "password": "$2a$10$demohashedpassword",
+            "commissionRate": 0.3,
+            "isActive": true,
+            "branding": {
+                "logo": "https://via.placeholder.com/200x200/45B7D1/FFFFFF?text=Food",
+                "primaryColor": "#45B7D1",
+                "secondaryColor": "#5FC3DD"
+            },
+            "createdAt": "2025-12-22T11:26:48.000Z",
+            "updatedAt": "2025-12-22T11:26:48.000Z"
+        },
+        {
+            "id": "4",
+            "name": "Wanderlust Travel",
+            "email": "contact@wanderlust.com",
+            "password": "$2a$10$demohashedpassword",
+            "commissionRate": 0.3,
+            "isActive": true,
+            "branding": {
+                "logo": "https://via.placeholder.com/200x200/96CEB4/FFFFFF?text=Travel",
+                "primaryColor": "#96CEB4",
+                "secondaryColor": "#A8D8C0"
+            },
+            "createdAt": "2025-12-22T11:26:48.000Z",
+            "updatedAt": "2025-12-22T11:26:48.000Z"
+        },
+        {
+            "id": "5",
+            "name": "GameZone Studios",
+            "email": "contact@gamezone.com",
+            "password": "$2a$10$demohashedpassword",
+            "commissionRate": 0.3,
+            "isActive": true,
+            "branding": {
+                "logo": "https://via.placeholder.com/200x200/FFEAA7/000000?text=Gaming",
+                "primaryColor": "#FFEAA7",
+                "secondaryColor": "#FFF0C3"
             },
             "createdAt": "2025-12-22T11:26:48.000Z",
             "updatedAt": "2025-12-22T11:26:48.000Z"

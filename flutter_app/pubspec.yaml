@@ -45,6 +45,12 @@ dependencies:
   
   # Intl for formatting
   intl: ^0.19.0
+  
+  # Device Info for fingerprinting
+  device_info_plus: ^10.1.0
+  
+  # Crypto for hashing
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:

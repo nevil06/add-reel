@@ -18,6 +18,7 @@ import 'package:sqflite_darwin/sqflite_darwin.dart' as sqflite_darwin;
 import 'package:url_launcher_ios/url_launcher_ios.dart' as url_launcher_ios;
 import 'package:video_player_avfoundation/video_player_avfoundation.dart' as video_player_avfoundation;
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart' as webview_flutter_wkwebview;
+import 'package:device_info_plus/device_info_plus.dart' as device_info_plus;
 import 'package:package_info_plus/package_info_plus.dart' as package_info_plus;
 import 'package:path_provider_linux/path_provider_linux.dart' as path_provider_linux;
 import 'package:shared_preferences_linux/shared_preferences_linux.dart' as shared_preferences_linux;
@@ -30,6 +31,7 @@ import 'package:url_launcher_macos/url_launcher_macos.dart' as url_launcher_maco
 import 'package:video_player_avfoundation/video_player_avfoundation.dart' as video_player_avfoundation;
 import 'package:wakelock_plus/wakelock_plus.dart' as wakelock_plus;
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart' as webview_flutter_wkwebview;
+import 'package:device_info_plus/device_info_plus.dart' as device_info_plus;
 import 'package:package_info_plus/package_info_plus.dart' as package_info_plus;
 import 'package:path_provider_windows/path_provider_windows.dart' as path_provider_windows;
 import 'package:shared_preferences_windows/shared_preferences_windows.dart' as shared_preferences_windows;
@@ -153,6 +155,15 @@ class _PluginRegistrant {
 
     } else if (Platform.isLinux) {
       try {
+        device_info_plus.DeviceInfoPlusLinuxPlugin.registerWith();
+      } catch (err) {
+        print(
+          '`device_info_plus` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
         package_info_plus.PackageInfoPlusLinuxPlugin.registerWith();
       } catch (err) {
         print(
@@ -262,6 +273,15 @@ class _PluginRegistrant {
       }
 
     } else if (Platform.isWindows) {
+      try {
+        device_info_plus.DeviceInfoPlusWindowsPlugin.registerWith();
+      } catch (err) {
+        print(
+          '`device_info_plus` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
       try {
         package_info_plus.PackageInfoPlusWindowsPlugin.registerWith();
       } catch (err) {

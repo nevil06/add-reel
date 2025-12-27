@@ -119,7 +119,7 @@
 68        android:label="AdReel" >
 68-->C:\Users\nevil\OneDrive\Desktop\addreel\flutter_app\android\app\src\main\AndroidManifest.xml:3:9-31
 69
-70        <!-- AdMob App ID -->
+70        <!-- AdMob App ID - PRODUCTION -->
 71        <meta-data
 71-->C:\Users\nevil\OneDrive\Desktop\addreel\flutter_app\android\app\src\main\AndroidManifest.xml:8:9-10:69
 72            android:name="com.google.android.gms.ads.APPLICATION_ID"

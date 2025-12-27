@@ -60,6 +60,20 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
+      name=":@@:device_info_plus::release"
+      jars="C:\Users\nevil\.gradle\caches\8.14\transforms\6df432b628241145d9d1549ebfd1956f\transformed\out\jars\classes.jar;C:\Users\nevil\.gradle\caches\8.14\transforms\6df432b628241145d9d1549ebfd1956f\transformed\out\jars\libs\R.jar"
+      resolved="dev.fluttercommunity.plus.device_info:device_info_plus:1.0-SNAPSHOT"
+      partialResultsDir="C:\Users\nevil\OneDrive\Desktop\addreel\flutter_app\build\device_info_plus\intermediates\lint_vital_partial_results\release\lintVitalAnalyzeRelease\out"
+      folder="C:\Users\nevil\.gradle\caches\8.14\transforms\6df432b628241145d9d1549ebfd1956f\transformed\out"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
       name=":@@:firebase_auth::release"
       jars="C:\Users\nevil\.gradle\caches\8.14\transforms\ff6831200ae5806ff0f73286e94031fe\transformed\out\jars\classes.jar;C:\Users\nevil\.gradle\caches\8.14\transforms\ff6831200ae5806ff0f73286e94031fe\transformed\out\jars\libs\R.jar"
       resolved="io.flutter.plugins.firebase.auth:firebase_auth:1.0-SNAPSHOT"

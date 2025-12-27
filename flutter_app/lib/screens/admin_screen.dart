@@ -16,6 +16,10 @@ class _AdminScreenState extends State<AdminScreen> {
   bool _isAuthenticated = false;
   final TextEditingController _passwordController = TextEditingController();
   Map<String, dynamic> _analytics = {};
+  
+  // TEMPORARY: Use simple password for demo
+  // TODO: Implement proper Firebase Admin authentication
+  static const String _tempAdminPassword = 'admin123';
 
   @override
   void initState() {
@@ -31,7 +35,7 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 
   void _authenticate() {
-    if (_passwordController.text == AppConfig.adminPassword) {
+    if (_passwordController.text == _tempAdminPassword) {
       setState(() {
         _isAuthenticated = true;
       });
@@ -281,7 +285,7 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Default password: ${AppConfig.adminPassword}',
+                'Default password: $_tempAdminPassword',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
