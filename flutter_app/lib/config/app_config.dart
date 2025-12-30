@@ -50,10 +50,11 @@ class AppConfig {
   static String get androidBannerAdUnitId => useTestAds ? androidTestBannerId : androidProdBannerId;
   static String get iosBannerAdUnitId => useTestAds ? iosTestBannerId : iosProdBannerId;
   
-  // Points Configuration
-  static const int pointsPerRewardedAd = 100;
+  // Points Configuration - UPDATED
+  static const int pointsPerAd = 5; // Changed from 100 - now 5 points per ad
   static const int pointsPerINR = 5000; // 5000 points = ₹1
-  static const int minimumWithdrawal = 10000; // Minimum points to withdraw
+  static const int minimumWithdrawal = 10000; // ₹2 minimum
+  static const int maximumWithdrawal = 7500000; // ₹1500 maximum (5000 * 1500)
   
   // Commission Configuration
   static const double commissionRate = 0.3; // 30% commission
@@ -61,6 +62,10 @@ class AppConfig {
   // App Configuration
   static const int adRefreshInterval = 3600000; // 1 hour in milliseconds
   static const bool useFallbackData = true;
+  
+  // Feed Configuration
+  static const int autoScrollInterval = 6; // seconds between auto-scroll
+  static const int adCompletionThreshold = 5; // seconds to consider ad "watched"
   
   // NOTE: Admin authentication now handled via Firebase Admin SDK
   // No hardcoded passwords for security
@@ -83,5 +88,24 @@ class AppConfig {
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
       (Match m) => '${m[1]},',
     );
+  }
+  
+  // Withdrawal validation
+  static bool canWithdraw(int points) {
+    final inr = pointsToINR(points);
+    return inr >= 2.0 && inr <= 1500.0;
+  }
+  
+  static String getWithdrawalStatus(int points) {
+    final inr = pointsToINR(points);
+    
+    if (inr < 2.0) {
+      final needed = 2.0 - inr;
+      return 'Need ${formatINR(needed)} more (minimum ₹2)';
+    } else if (inr > 1500.0) {
+      return 'Maximum limit reached (₹1500)';
+    } else {
+      return 'Eligible: ${formatINR(inr)} available';
+    }
   }
 }

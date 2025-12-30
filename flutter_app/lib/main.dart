@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'screens/earn_screen.dart'; // Changed from feed_screen
+import 'screens/ads_feed_screen.dart'; // NEW: Ads feed with auto-scroll
 import 'screens/wallet_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/admin_screen.dart';
@@ -12,6 +12,7 @@ import 'screens/login_screen.dart';
 import 'services/points_service.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
+import 'services/feed_service.dart'; // NEW: Feed service for auto-scroll
 import 'config/app_config.dart';
 
 void main() async {
@@ -65,6 +66,7 @@ class AdReelApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => PointsService()),
+        ChangeNotifierProvider(create: (_) => FeedService()), // NEW: Feed service
         Provider(create: (_) => ApiService()),
         Provider(create: (_) => AuthService()),
       ],
@@ -77,6 +79,7 @@ class AdReelApp extends StatelessWidget {
             brightness: Brightness.light,
           ),
           useMaterial3: true,
+          fontFamily: 'Inter', // Premium custom font
         ),
         darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
@@ -84,27 +87,25 @@ class AdReelApp extends StatelessWidget {
             brightness: Brightness.dark,
           ),
           useMaterial3: true,
+          fontFamily: 'Inter', // Premium custom font
         ),
-        // Skip auth for demo - go straight to main screen
-        home: const DemoModeWrapper(),
+        // Production mode - uses Firebase authentication
+        home: const ProductionWrapper(),
       ),
     );
   }
 }
 
 
-// Demo mode wrapper - bypasses authentication for testing
-class DemoModeWrapper extends StatelessWidget {
-  const DemoModeWrapper({super.key});
+// Temporary demo mode for testing without Firebase
+class ProductionWrapper extends StatelessWidget {
+  const ProductionWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Skip login and go straight to app for testing
-    // TODO: Enable AuthWrapper after running 'flutterfire configure'
-    return const MainScreen();
-    
-    // Uncomment below after Firebase is configured:
+    // TODO: Change back to AuthWrapper after Firebase is configured
     // return const AuthWrapper();
+    return const MainScreen(); // Temporary for testing
   }
 }
 
@@ -158,7 +159,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const EarnScreen(), // Changed from FeedScreen - now focused on AdMob ads only
+    const AdsFeedScreen(), // NEW: Auto-scroll feed with banner ads
     const WalletScreen(),
     const SettingsScreen(),
     const AdminScreen(),
@@ -180,9 +181,9 @@ class _MainScreenState extends State<MainScreen> {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.currency_rupee_outlined),
-            selectedIcon: Icon(Icons.currency_rupee),
-            label: 'Earn',
+            icon: Icon(Icons.play_circle_outline),
+            selectedIcon: Icon(Icons.play_circle_filled),
+            label: 'Watch Ads',
           ),
           NavigationDestination(
             icon: Icon(Icons.account_balance_wallet_outlined),

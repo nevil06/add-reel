@@ -11,6 +11,11 @@ class Ad {
   final bool isActive;
   final int order;
   final DateTime createdAt;
+  
+  // NEW: Analytics fields
+  final int likes;
+  final bool isLiked; // Has current user liked this ad
+  final String network; // 'admob', 'unity', 'meta'
 
   Ad({
     required this.id,
@@ -25,6 +30,9 @@ class Ad {
     required this.isActive,
     required this.order,
     required this.createdAt,
+    this.likes = 0,
+    this.isLiked = false,
+    this.network = 'admob',
   });
 
   factory Ad.fromJson(Map<String, dynamic> json) {

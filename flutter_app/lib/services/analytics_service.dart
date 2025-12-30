@@ -118,6 +118,64 @@ class AnalyticsService {
     }
   }
 
+  // NEW: Track ad view (for feed ads)
+  Future<void> trackAdView({
+    required String adId,
+    required String userId,
+    required int watchDuration,
+    required bool completed,
+  }) async {
+    await trackVideoView(
+      adId: adId,
+      companyId: 'admob',
+      watchDuration: watchDuration,
+      completed: completed,
+    );
+  }
+
+  // NEW: Track like on ad
+  Future<void> likeAd(String adId, String userId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final likesKey = 'ad_likes_$adId';
+      final userLikesKey = 'user_likes_$userId';
+      
+      // Get current likes for this ad
+      final currentLikes = prefs.getInt(likesKey) ?? 0;
+      await prefs.setInt(likesKey, currentLikes + 1);
+      
+      // Track that this user liked this ad
+      final userLikes = prefs.getStringList(userLikesKey) ?? [];
+      if (!userLikes.contains(adId)) {
+        userLikes.add(adId);
+        await prefs.setStringList(userLikesKey, userLikes);
+      }
+    } catch (e) {
+      print('Error liking ad: $e');
+    }
+  }
+
+  // Get likes for an ad
+  Future<int> getAdLikes(String adId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getInt('ad_likes_$adId') ?? 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  // Check if user liked an ad
+  Future<bool> hasUserLikedAd(String adId, String userId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userLikes = prefs.getStringList('user_likes_$userId') ?? [];
+      return userLikes.contains(adId);
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Reset analytics (for testing)
   Future<void> resetAnalytics() async {
     try {
