@@ -42,6 +42,23 @@ class AppConfig {
   static const String androidProdBannerId = 'ca-app-pub-7611642022143924/6044444762'; // ✅ Your banner ad
   static const String iosProdBannerId = 'ca-app-pub-7611642022143924/6044444762'; // ✅ Using same for iOS
   
+  // Unity Ads Configuration
+  // Game ID from Unity Dashboard
+  static const String unityGameIdAndroid = '4867492'; // Test Game ID
+  static const String unityGameIdIOS = '4867493'; // Test Game ID
+  static const bool unityTestMode = true;
+  static const String unityBannerAdPlacementId = 'Banner_Android';
+  static const String unityRewardedAdPlacementId = 'Rewarded_Android';
+  
+  // Facebook Audience Network Configuration
+  // Placement IDs (Demo/Test IDs)
+  static const String fbBannerPlacementId = 'IMG_16_9_APP_INSTALL#YOUR_EXACT_PLACEMENT_ID';
+  static const String fbInterstitialPlacementId = 'IMG_16_9_APP_INSTALL#YOUR_EXACT_PLACEMENT_ID';
+  static const String fbRewardedPlacementId = 'IMG_16_9_APP_INSTALL#YOUR_EXACT_PLACEMENT_ID';
+  
+  // BitLabs Configuration
+  static const String bitLabsAppToken = '4c619888-2565-4309-906d-741a3d242407'; // Test/Demo Token
+  
   // Get the appropriate Ad Unit IDs based on platform and test mode
   static String get androidRewardedAdUnitId => useTestAds ? androidTestRewardedId : androidProdRewardedId;
   static String get iosRewardedAdUnitId => useTestAds ? iosTestRewardedId : iosProdRewardedId;

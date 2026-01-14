@@ -27,7 +27,8 @@ class DeviceService {
         // Combine multiple identifiers for uniqueness
         final data = [
           androidInfo.id,
-          androidInfo.androidId ?? '',
+          androidInfo.id,
+          // androidInfo.androidId was removed in newer versions
           androidInfo.model,
           androidInfo.brand,
           androidInfo.device,

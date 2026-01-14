@@ -4,6 +4,7 @@ import '../models/survey_model.dart';
 import '../services/survey_service.dart';
 import '../services/points_service.dart';
 import '../services/auth_service.dart';
+import 'package:bitlabs/bitlabs.dart'; // NEW: BitLabs SDK
 
 class SurveyScreen extends StatefulWidget {
   const SurveyScreen({super.key});
@@ -36,15 +37,41 @@ class _SurveyScreenState extends State<SurveyScreen> {
         title: const Text('Surveys'),
         backgroundColor: Colors.transparent,
       ),
-      body: surveys.isEmpty
-          ? _buildEmptyState()
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: surveys.length,
-              itemBuilder: (context, index) {
-                return _buildSurveyCard(surveys[index]);
-              },
+      body: Column(
+        children: [
+            // BitLabs Partner Surveys
+            Container(
+                margin: const EdgeInsets.all(16),
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                    onPressed: () {
+                        BitLabs.instance.launchOfferWall(context);
+                    },
+                    icon: const Icon(Icons.public, color: Colors.white),
+                    label: const Text('Take Partner Surveys (BitLabs)'),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                         foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                        ),
+                    ),
+                ),
             ),
+            Expanded(
+                child: surveys.isEmpty
+                    ? _buildEmptyState()
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: surveys.length,
+                        itemBuilder: (context, index) {
+                            return _buildSurveyCard(surveys[index]);
+                        },
+                     ),
+            ),
+        ],
+      ),
     );
   }
 

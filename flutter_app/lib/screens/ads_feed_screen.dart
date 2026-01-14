@@ -8,6 +8,8 @@ import '../services/analytics_service.dart';
 import '../services/auth_service.dart';
 import '../config/app_config.dart';
 import '../models/ad_model.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 
 class AdsFeedScreen extends StatefulWidget {
   const AdsFeedScreen({super.key});
@@ -52,8 +54,42 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
       );
     });
 
+    // Add Unity and Facebook Ads
+    final unityAds = List.generate(3, (index) {
+        return Ad(
+            id: 'unity_$index',
+            companyId: 'unity',
+            companyName: 'Unity Ads',
+            videoUrl: '',
+            title: 'Unity Ad ${index + 1}',
+            description: 'Watch this Unity ad to earn 5 points',
+            isActive: true,
+            order: 10 + index,
+            createdAt: DateTime.now(),
+            network: 'unity',
+        );
+    });
+
+    final fbAds = List.generate(3, (index) {
+        return Ad(
+            id: 'facebook_$index',
+            companyId: 'facebook',
+            companyName: 'Facebook Audience Network',
+            videoUrl: '',
+            title: 'Facebook Ad ${index + 1}',
+            description: 'Watch this Facebook ad to earn 5 points',
+            isActive: true,
+            order: 20 + index,
+            createdAt: DateTime.now(),
+            network: 'facebook',
+        );
+    });
+
     setState(() {
       _ads.addAll(sampleAds);
+      _ads.addAll(unityAds);
+      _ads.addAll(fbAds);
+      _ads.shuffle(); // Randomize the mix
       _isLoading = false;
     });
 
@@ -66,8 +102,16 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
   }
 
   void _preloadBannerAds() {
-    for (int i = 0; i < _ads.length && i < 5; i++) {
-      _loadBannerAd(i);
+    for (int i = 0; i < _ads.length && i < 10; i++) {
+     // _loadBannerAd(i); // Only load AdMob banners this way
+     // For Unity and Facebook, widgets manage their own loading
+    }
+    
+    // Specifically load AdMob banners
+    for (int i = 0; i < _ads.length; i++) {
+        if (_ads[i].network == 'admob') {
+            _loadBannerAd(i);
+        }
     }
   }
 
@@ -335,6 +379,59 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
                   child: admob.AdWidget(ad: bannerAd),
                 ),
               )
+            // Unity Ad Widget
+            else if (ad.network == 'unity')
+                 Container(
+                    width: 320,
+                    height: 270,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.black, // Placeholder background
+                    ),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: UnityBannerAd(
+                            placementId: AppConfig.unityBannerAdPlacementId,
+                            onLoad: (placementId) => print('Unity Banner loaded: $placementId'),
+                            onFailed: (placementId, error, message) => print('Unity Banner failed: $placementId $error $message'),
+                            onClick: (placementId) => print('Unity Banner clicked: $placementId'),
+                        ),
+                    ),
+                 )
+            // Facebook Ad Widget
+            else if (ad.network == 'facebook')
+                 Container(
+                    width: 320,
+                    height: 270,
+                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.black,
+                    ),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: FacebookBannerAd(
+                            placementId: AppConfig.fbBannerPlacementId,
+                            bannerSize: BannerSize.MEDIUM_RECTANGLE,
+                            keepAlive: true,
+                            listener: (result, value) {
+                                switch (result) {
+                                  case BannerAdResult.ERROR:
+                                    print("Error: $value");
+                                    break;
+                                  case BannerAdResult.LOADED:
+                                    print("Loaded: $value");
+                                    break;
+                                  case BannerAdResult.CLICKED:
+                                    print("Clicked: $value");
+                                    break;
+                                  case BannerAdResult.LOGGING_IMPRESSION:
+                                    print("Logging Impression: $value");
+                                    break;
+                                }
+                            },
+                        ),
+                    ),
+                 )
             else
               Container(
                 width: 320,

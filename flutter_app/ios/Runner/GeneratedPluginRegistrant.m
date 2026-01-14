@@ -6,6 +6,12 @@
 
 #import "GeneratedPluginRegistrant.h"
 
+#if __has_include(<bitlabs/BitlabsPlugin.h>)
+#import <bitlabs/BitlabsPlugin.h>
+#else
+@import bitlabs;
+#endif
+
 #if __has_include(<cloud_firestore/FLTFirebaseFirestorePlugin.h>)
 #import <cloud_firestore/FLTFirebaseFirestorePlugin.h>
 #else
@@ -16,6 +22,12 @@
 #import <device_info_plus/FPPDeviceInfoPlusPlugin.h>
 #else
 @import device_info_plus;
+#endif
+
+#if __has_include(<facebook_audience_network/FacebookAudienceNetworkPlugin.h>)
+#import <facebook_audience_network/FacebookAudienceNetworkPlugin.h>
+#else
+@import facebook_audience_network;
 #endif
 
 #if __has_include(<firebase_auth/FLTFirebaseAuthPlugin.h>)
@@ -60,6 +72,12 @@
 @import sqflite_darwin;
 #endif
 
+#if __has_include(<unity_ads_plugin/UnityAdsPlugin.h>)
+#import <unity_ads_plugin/UnityAdsPlugin.h>
+#else
+@import unity_ads_plugin;
+#endif
+
 #if __has_include(<url_launcher_ios/URLLauncherPlugin.h>)
 #import <url_launcher_ios/URLLauncherPlugin.h>
 #else
@@ -87,8 +105,10 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
+  [BitlabsPlugin registerWithRegistrar:[registry registrarForPlugin:@"BitlabsPlugin"]];
   [FLTFirebaseFirestorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseFirestorePlugin"]];
   [FPPDeviceInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPDeviceInfoPlusPlugin"]];
+  [FacebookAudienceNetworkPlugin registerWithRegistrar:[registry registrarForPlugin:@"FacebookAudienceNetworkPlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTGoogleMobileAdsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleMobileAdsPlugin"]];
@@ -96,6 +116,7 @@
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
+  [UnityAdsPlugin registerWithRegistrar:[registry registrarForPlugin:@"UnityAdsPlugin"]];
   [URLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"URLLauncherPlugin"]];
   [FVPVideoPlayerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FVPVideoPlayerPlugin"]];
   [WakelockPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"WakelockPlusPlugin"]];

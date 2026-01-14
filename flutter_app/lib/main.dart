@@ -14,6 +14,8 @@ import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/feed_service.dart'; // NEW: Feed service for auto-scroll
 import 'services/survey_service.dart'; // NEW: Survey service
+import 'services/ad_service.dart'; // NEW: Unified ad service
+import 'package:bitlabs/bitlabs.dart'; // NEW: BitLabs SDK
 import 'screens/survey_screen.dart'; // NEW: Survey screen
 import 'config/app_config.dart';
 import 'config/instagram_theme.dart';
@@ -40,22 +42,22 @@ void main() async {
   }
   
   // Initialize AdMob (only on mobile)
+  // Initialize AdService (AdMob, Unity, Facebook)
   if (!kIsWeb) {
-    await MobileAds.instance.initialize();
+    await AdService().initialize();
     
-    // Configure test devices if any are specified
-    // This allows YOUR devices to see test ads while others see real ads
-    if (AppConfig.testDeviceIds.isNotEmpty) {
-      RequestConfiguration requestConfiguration = RequestConfiguration(
-        testDeviceIds: AppConfig.testDeviceIds,
-      );
-      MobileAds.instance.updateRequestConfiguration(requestConfiguration);
-      print('✅ AdMob initialized with ${AppConfig.testDeviceIds.length} test device(s)');
-    } else {
-      print('✅ AdMob initialized (production mode - real ads for all users)');
+    // Initialize BitLabs
+    try {
+      BitLabs.instance.init(
+        AppConfig.bitLabsAppToken,
+        'USER_ID_PLACEHOLDER', // Will be updated with real user ID after login
+      ); 
+      print('✅ BitLabs initialized');
+    } catch (e) {
+      print('⚠️ BitLabs initialization error: $e');
     }
   } else {
-    print('⚠️ AdMob not available on web');
+    print('⚠️ Ads and Surveys not available on web');
   }
   
   runApp(const AdReelApp());

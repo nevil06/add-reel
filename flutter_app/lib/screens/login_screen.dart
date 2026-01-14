@@ -337,16 +337,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          ),
+                          ), // Close Row
+                        ], // Close Inner Column children
+                      ), // Close Inner Column
+                    ), // Close Inner Container (Login Card)
+                  ], // Close Outer Column children
+                ), // Close Outer Column
+              ), // Close Form
+            ), // Close SingleChildScrollView
+          ), // Close Center
+          ), // Close SafeArea
+          ), // Close Background Container
           // Skip button to go directly to app
           Positioned(
             top: 50,
