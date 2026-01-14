@@ -387,18 +387,23 @@ ${ad.description}
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: isLiked ? Colors.transparent : Colors.white.withOpacity(0.2),
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withOpacity(0.3)),
+              border: isLiked ? null : Border.all(color: Colors.white.withOpacity(0.3)),
             ),
-            child: Icon(icon, color: Colors.white, size: 24),
+            child: Icon(
+              icon,
+              color: isLiked ? const Color(0xFFED4956) : Colors.white, // Instagram red for liked
+              size: 28,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 12,
+              fontWeight: isLiked ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],

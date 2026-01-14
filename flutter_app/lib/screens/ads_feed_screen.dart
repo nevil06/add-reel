@@ -480,22 +480,23 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
         // Actions row
         Row(
           children: [
-            // Like button
+            // Like button - Instagram Style
             GestureDetector(
               onTap: () => _toggleLike(ad),
               child: Column(
                 children: [
                   Icon(
                     ad.isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: ad.isLiked ? Colors.red : Colors.white,
+                    color: ad.isLiked ? const Color(0xFFED4956) : Colors.white, // Instagram red
                     size: 32,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${ad.likes}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
+                      fontWeight: ad.isLiked ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
                 ],

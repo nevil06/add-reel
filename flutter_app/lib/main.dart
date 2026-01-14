@@ -14,6 +14,7 @@ import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/feed_service.dart'; // NEW: Feed service for auto-scroll
 import 'config/app_config.dart';
+import 'config/instagram_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,22 +74,9 @@ class AdReelApp extends StatelessWidget {
       child: MaterialApp(
         title: 'AdReel',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF6366F1),
-            brightness: Brightness.light,
-          ),
-          useMaterial3: true,
-          fontFamily: 'Inter', // Premium custom font
-        ),
-        darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF6366F1),
-            brightness: Brightness.dark,
-          ),
-          useMaterial3: true,
-          fontFamily: 'Inter', // Premium custom font
-        ),
+        theme: InstagramTheme.lightTheme,
+        darkTheme: InstagramTheme.darkTheme,
+        themeMode: ThemeMode.dark, // Default to dark theme for video content
         // Production mode - uses Firebase authentication
         home: const ProductionWrapper(),
       ),
@@ -182,8 +170,8 @@ class _MainScreenState extends State<MainScreen> {
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.play_circle_outline),
-            selectedIcon: Icon(Icons.play_circle_filled),
-            label: 'Watch Ads',
+            selectedIcon: Icon(Icons.play_circle),
+            label: 'Reels',
           ),
           NavigationDestination(
             icon: Icon(Icons.account_balance_wallet_outlined),
