@@ -13,6 +13,8 @@ import 'services/points_service.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/feed_service.dart'; // NEW: Feed service for auto-scroll
+import 'services/survey_service.dart'; // NEW: Survey service
+import 'screens/survey_screen.dart'; // NEW: Survey screen
 import 'config/app_config.dart';
 import 'config/instagram_theme.dart';
 
@@ -67,7 +69,8 @@ class AdReelApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => PointsService()),
-        ChangeNotifierProvider(create: (_) => FeedService()), // NEW: Feed service
+        ChangeNotifierProvider(create: (_) => FeedService()),
+        ChangeNotifierProvider(create: (_) => SurveyService()),
         Provider(create: (_) => ApiService()),
         Provider(create: (_) => AuthService()),
       ],
@@ -79,21 +82,24 @@ class AdReelApp extends StatelessWidget {
         themeMode: ThemeMode.dark, // Default to dark theme for video content
         // Production mode - uses Firebase authentication
         home: const ProductionWrapper(),
+        routes: {
+          '/main': (context) => const MainScreen(),
+        },
       ),
     );
   }
 }
 
 
-// Temporary demo mode for testing without Firebase
+// Production mode - shows main app directly
 class ProductionWrapper extends StatelessWidget {
   const ProductionWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Change back to AuthWrapper after Firebase is configured
-    // return const AuthWrapper();
-    return const MainScreen(); // Temporary for testing
+    // Goes directly to main app
+    // To see Instagram theme login screen, change this to: return const LoginScreen();
+    return const MainScreen();
   }
 }
 
@@ -149,6 +155,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const AdsFeedScreen(), // NEW: Auto-scroll feed with banner ads
     const WalletScreen(),
+    const SurveyScreen(), // NEW: Survey questions
     const SettingsScreen(),
     const AdminScreen(),
   ];
@@ -177,6 +184,11 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.account_balance_wallet_outlined),
             selectedIcon: Icon(Icons.account_balance_wallet),
             label: 'Wallet',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.assignment_outlined),
+            selectedIcon: Icon(Icons.assignment),
+            label: 'Surveys',
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),
