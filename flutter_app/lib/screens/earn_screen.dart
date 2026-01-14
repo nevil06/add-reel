@@ -32,7 +32,7 @@ class _EarnScreenState extends State<EarnScreen> {
       await _adMobService.showRewardedAd(
         onRewarded: (points) {
           pointsService.addPoints(
-            AppConfig.pointsPerRewardedAd,
+            AppConfig.pointsPerAd,
             'Watched rewarded ad',
           );
           
@@ -40,7 +40,7 @@ class _EarnScreenState extends State<EarnScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  '+${AppConfig.pointsPerRewardedAd} points earned!',
+                  '+${AppConfig.pointsPerAd} points earned!',
                 ),
                 backgroundColor: Colors.green,
                 behavior: SnackBarBehavior.floating,
@@ -177,7 +177,7 @@ class _EarnScreenState extends State<EarnScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Earn ${AppConfig.pointsPerRewardedAd} points per ad',
+                          'Earn ${AppConfig.pointsPerAd} points per ad',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey[600],
@@ -224,7 +224,7 @@ class _EarnScreenState extends State<EarnScreen> {
                   description:
                       '1. Tap "Watch Ad"\n'
                       '2. Watch the full advertisement\n'
-                      '3. Earn ${AppConfig.pointsPerRewardedAd} points instantly\n'
+                      '3. Earn ${AppConfig.pointsPerAd} points instantly\n'
                       '4. Repeat to earn more!',
                 ),
 

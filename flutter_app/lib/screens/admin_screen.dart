@@ -192,7 +192,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                   child: Column(
                     children: [
-                      _buildInfoRow('Points per ad', '${AppConfig.pointsPerRewardedAd}'),
+                      _buildInfoRow('Points per ad', '${AppConfig.pointsPerAd}'),
                       const Divider(),
                       _buildInfoRow('Conversion rate', '${AppConfig.pointsPerINR} points = ₹1'),
                       const Divider(),

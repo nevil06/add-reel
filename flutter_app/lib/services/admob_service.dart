@@ -142,7 +142,7 @@ class AdMobService {
       onUserEarnedReward: (ad, reward) {
         print('User earned reward: ${reward.amount} ${reward.type}');
         rewarded = true;
-        onRewarded(AppConfig.pointsPerRewardedAd);
+        onRewarded(AppConfig.pointsPerAd);
       },
     );
 
