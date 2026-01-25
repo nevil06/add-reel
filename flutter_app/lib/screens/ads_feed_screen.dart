@@ -6,6 +6,7 @@ import '../services/feed_service.dart';
 import '../services/points_service.dart';
 import '../services/analytics_service.dart';
 import '../services/auth_service.dart';
+import '../services/unity_ads_service.dart';
 import '../config/app_config.dart';
 import '../models/ad_model.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
@@ -25,15 +26,24 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
   final Map<String, bool> _adWatched = {};
   final Map<String, int> _watchDurations = {};
   final Map<String, Timer?> _watchTimers = {};
+  final UnityAdsService _unityAdsService = UnityAdsService();
   
   int _currentPage = 0;
   bool _isLoading = true;
+  bool _isLoadingUnityAd = false;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     _loadAds();
+    _initializeUnityAds();
+  }
+
+  Future<void> _initializeUnityAds() async {
+    // Preload Unity rewarded ads
+    await _unityAdsService.loadRewardedAd();
+    await _unityAdsService.loadInterstitialAd();
   }
 
   Future<void> _loadAds() async {
@@ -541,10 +551,96 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
                 feedService.toggleAutoPlay(!feedService.autoPlayEnabled);
               },
             ),
+
+            const SizedBox(height: 16),
+
+            // Unity Rewarded Ad Button
+            Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF6366F1),
+                    Color(0xFF8B5CF6),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withOpacity(0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: IconButton(
+                icon: _isLoadingUnityAd
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.play_arrow,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                onPressed: _isLoadingUnityAd ? null : _showUnityRewardedAd,
+                tooltip: 'Watch Unity Ad',
+              ),
+            ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _showUnityRewardedAd() async {
+    if (!_unityAdsService.isRewardedAdReady) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unity Ad is loading, please wait...'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoadingUnityAd = true;
+    });
+
+    final pointsService = context.read<PointsService>();
+
+    final success = await _unityAdsService.showRewardedAd(
+      onRewarded: (points) {
+        pointsService.addPoints(
+          points,
+          'Watched Unity Rewarded Ad',
+        );
+      },
+      onAdClosed: () {
+        setState(() {
+          _isLoadingUnityAd = false;
+        });
+      },
+    );
+
+    if (!success) {
+      setState(() {
+        _isLoadingUnityAd = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to show Unity Ad. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Widget _buildAdInfo(Ad ad) {

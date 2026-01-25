@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../services/points_service.dart';
 import '../services/admob_service.dart';
+import '../services/unity_ads_service.dart';
 import '../config/app_config.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -14,11 +15,13 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
   final AdMobService _adMobService = AdMobService();
+  final UnityAdsService _unityAdsService = UnityAdsService();
 
   @override
   void initState() {
     super.initState();
     _adMobService.loadRewardedAd();
+    _unityAdsService.loadRewardedAd();
   }
 
   Future<void> _showRewardedAd() async {
@@ -47,6 +50,38 @@ class _WalletScreenState extends State<WalletScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Ad not ready yet. Please try again.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<void> _showUnityRewardedAd() async {
+    final pointsService = context.read<PointsService>();
+    
+    final success = await _unityAdsService.showRewardedAd(
+      onRewarded: (points) async {
+        await pointsService.addPoints(points, 'Watched Unity rewarded ad');
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('🎉 Earned $points points from Unity Ad!'),
+              backgroundColor: const Color(0xFF6366F1),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+      onAdClosed: () {
+        _unityAdsService.loadRewardedAd();
+      },
+    );
+
+    if (!success && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unity Ad not ready yet. Please try again.'),
           duration: Duration(seconds: 2),
         ),
       );
@@ -168,13 +203,15 @@ class _WalletScreenState extends State<WalletScreen> {
                 // Action Buttons
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Expanded(
+                      // AdMob Button
+                      SizedBox(
+                        width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: _adMobService.isAdLoaded ? _showRewardedAd : null,
                           icon: const Icon(Icons.play_circle),
-                          label: const Text('Earn Points'),
+                          label: const Text('Watch AdMob Ad'),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -183,8 +220,28 @@ class _WalletScreenState extends State<WalletScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
+                      const SizedBox(height: 12),
+                      // Unity Ads Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: _unityAdsService.isRewardedAdReady ? _showUnityRewardedAd : null,
+                          icon: const Icon(Icons.play_arrow),
+                          label: const Text('Watch Unity Ad'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF6366F1),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      // Withdraw Button
+                      SizedBox(
+                        width: double.infinity,
                         child: OutlinedButton.icon(
                           onPressed: pointsService.canWithdraw
                               ? () => _showWithdrawDialog(context, pointsService)
