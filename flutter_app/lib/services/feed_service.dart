@@ -79,22 +79,23 @@ class FeedService extends ChangeNotifier {
     _autoScrollTimer = Timer.periodic(
       Duration(seconds: autoScrollInterval),
       (timer) {
-        if (_pageController != null && _currentIndex < _totalAds - 1) {
-          _currentIndex++;
-          _pageController!.animateToPage(
-            _currentIndex,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-          );
-        } else if (_currentIndex >= _totalAds - 1) {
-          // Loop back to start
-          _currentIndex = 0;
-          _pageController!.animateToPage(
-            0,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-          );
+        // Check if page controller is available and mounted
+        if (_pageController == null || !_pageController!.hasClients) {
+          return;
         }
+        
+        // Calculate next index
+        final nextIndex = (_currentIndex + 1) % _totalAds;
+        
+        // Animate to next page
+        _pageController!.animateToPage(
+          nextIndex,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+        
+        // Note: _currentIndex will be updated by onPageChanged callback
+        // Don't update it here to avoid race conditions
       },
     );
   }
@@ -109,8 +110,10 @@ class FeedService extends ChangeNotifier {
   void updateCurrentIndex(int index) {
     _currentIndex = index;
     
-    // Restart auto-scroll timer if enabled
-    if (_autoScrollEnabled) {
+    // Only restart auto-scroll timer if enabled and user manually scrolled
+    // This prevents conflicts when auto-scroll triggers page changes
+    if (_autoScrollEnabled && _autoScrollTimer != null) {
+      // Restart the timer to reset the countdown
       _startAutoScroll();
     }
     
